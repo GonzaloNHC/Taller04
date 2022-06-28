@@ -1,20 +1,14 @@
 package dominio;
 
 public class Estudiante {
-    private String Nombre,rut,corre;
+    private String rut;
+    private String nombre;
+    private String email;
 
-    public Estudiante(String nombre, String rut, String corre) {
-        Nombre = nombre;
+    public Estudiante(String rut, String nombre, String email) {
         this.rut = rut;
-        this.corre = corre;
-    }
-
-    public String getNombre() {
-        return Nombre;
-    }
-
-    public void setNombre(String nombre) {
-        Nombre = nombre;
+        this.nombre = nombre;
+        this.email = email;
     }
 
     public String getRut() {
@@ -25,11 +19,24 @@ public class Estudiante {
         this.rut = rut;
     }
 
-    public String getCorre() {
-        return corre;
+    public String getNombre() {
+        return nombre;
     }
 
-    public void setCorre(String corre) {
-        this.corre = corre;
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
     }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String toString() {
+        return (this.rut + ";" + this.nombre + ";" + this.email);
+    }
+
 }

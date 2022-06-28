@@ -1,31 +1,63 @@
 package gui;
 
+import dominio.Curso;
+import dominio.Estudiante;
+import dominio.EstudianteNoEncontradoException;
+
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class Ventana_CursoICC264 extends Ventana implements ActionListener {
-    JButton NuevoEstudiante;
-    JLabel Nombre;
-    JLabel Email;
-    JComboBox Rut;
+    private Curso curso;
+    private JButton nuevoEstudianteBtn;
+    private JButton buscarBtn;
+    private JComboBox rutEstudiante;
 
-    public Ventana_CursoICC264(){
-        Nombre = this.generarEtiqueta("Nombre",20,100,70,20,"Calibri",13);
-        Email = this.generarEtiqueta("Email",20,150,70,20,"Calibri",13);
+    private JLabel nombreLabel;
+    private JLabel emailLabel;
 
-        NuevoEstudiante = this.generarBoton("Nuevo Estudiante",200,300,150,50);
-        NuevoEstudiante.addActionListener(this);
+    private JLabel nombre;
+    private JLabel email;
 
+    public Ventana_CursoICC264(Curso curso) {
+        this.curso = curso;
+
+        this.setTitle("Curso ICC264");
+
+        JLabel nombreLabel = this.generarEtiqueta("Nombre: ", 20, 100, 80, 20);
+        JLabel emailLabel = this.generarEtiqueta("Email: ", 20, 150, 80, 20);
+
+        nuevoEstudianteBtn = this.generarBoton("Nuevo estudiante", 200, 200, 150, 30);
+        nuevoEstudianteBtn.addActionListener(this);
+
+        buscarBtn = this.generarBoton("Buscar estudiante", 20, 200, 150, 30);
+        buscarBtn.addActionListener(this);
+
+        nombre = this.generarEtiqueta("", 100, 100, 300, 20);
+        email = this.generarEtiqueta("", 100, 150, 300, 20);
+
+        rutEstudiante = this.generarComboBox(curso.getEstudiantes(), 20, 50, 200, 20);
     }
 
+    public void mostrarDatosEstudiante() throws EstudianteNoEncontradoException {
+        Estudiante e = curso.buscarEstudiantePorRut(rutEstudiante.getSelectedItem().toString());
+        nombre.setText(e.getNombre());
+        email.setText(e.getEmail());
+    }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if(e.getSource()==NuevoEstudiante) {
+        if(e.getSource() == nuevoEstudianteBtn) {
+            new Ventana_AgregarEstudianteICC264(this.curso);
             this.dispose();
-            Ventana_AgregarEstudianteICC264 vtn= new Ventana_AgregarEstudianteICC264();
-
+        } else if(e.getSource() == buscarBtn) {
+            try {
+                mostrarDatosEstudiante();
+            } catch (EstudianteNoEncontradoException ex) {
+                ex.printStackTrace();
+            }
         }
     }
+
 }

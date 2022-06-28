@@ -1,6 +1,9 @@
 package gui;
+import dominio.Estudiante;
+
 import javax.swing.*;
 import java.awt.*;
+import java.util.List;
 
 public abstract class Ventana extends JFrame {
     public Ventana(){
@@ -49,18 +52,14 @@ public abstract class Ventana extends JFrame {
         return etiqueta;
     }
 
-    protected JComboBox generarComboBox(int minReps, int maxReps, int x, int y, int ancho, int largo) {
+    protected JComboBox generarComboBox(List <Estudiante> estudianteList, int x, int y, int ancho, int largo) {
         JComboBox <String> comboBox = new JComboBox<String>();
-        comboBox.setBounds(x,y,ancho,largo);
-        int numeroDeReps = maxReps - minReps + 1;
-        String[] numeros = new String[numeroDeReps];
-
-        for (int i = minReps; i <= maxReps; i++) {
-            numeros[i - minReps] = String.valueOf(i);
-            comboBox.addItem(numeros[i - minReps]);
-        }
-
         this.add(comboBox);
+        comboBox.setBounds(x,y,ancho,largo);
+
+        for (Estudiante e: estudianteList) {
+            comboBox.addItem(e.getRut());
+        }
 
         return comboBox;
     }

@@ -1,31 +1,45 @@
 package datos;
-
 import dominio.Estudiante;
-import utils.DigitoVerificador;
-import utils.ValidadorEmail;
-
-import java.util.List;
-
+import dominio.Curso;
+import java.io.*;
 public class DatosEstudiante {
-    private List<Estudiante> estudiantes;
+    public static void leerArchivoEstudiantes(Curso curso, String direccionArchivo) {
+        String textoArchivo = "";
+        try {
+            File archivo = new File(direccionArchivo);
+            FileReader fr = new FileReader(archivo);
+            BufferedReader br = new BufferedReader(fr);
 
-    public DatosEstudiante(List<Estudiante> estudiantes) {
-        this.estudiantes = estudiantes;
-    }
-
-    public List<Estudiante> getEstudiantes() {
-        return estudiantes;
-    }
-
-    public void setEstudiantes(List<Estudiante> estudiantes) {
-        this.estudiantes = estudiantes;
-    }
-
-    public boolean añadirEstudiante(Estudiante estudiante){
-        if(DigitoVerificador.validarRut(estudiante.getRut())&& ValidadorEmail.validaEmail(estudiante.getCorre())){
-            this.estudiantes.add(estudiante);
-            return true;
+            while((textoArchivo = br.readLine()) != null){
+                String[] data = textoArchivo.split(";");
+                curso.getEstudiantes().add(new Estudiante(data[0], data[1], data[2]));
+            }
+        } catch (Exception e) {
+            System.out.println("Documento no disponible");
         }
-        return false;
+    }
+
+    public static boolean registrarDatos(Object objeto, String direccionArchivo) {
+        boolean lineaVacia=false;
+        try {
+            File file = new File(direccionArchivo);
+            if (!file.exists()) {
+                file.createNewFile();
+                lineaVacia=true;
+            }
+            FileWriter fw = new FileWriter(file,true);
+            BufferedWriter bw = new BufferedWriter(fw);
+
+            if(!lineaVacia){
+                bw.newLine();
+            }
+            bw.write(objeto.toString());
+            bw.close();
+            return true;
+        } catch (Exception e) {
+            System.out.println("Error al ingresar datos de estudiante");
+            return false;
+        }
     }
 }
+
