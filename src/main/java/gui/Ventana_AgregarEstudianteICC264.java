@@ -1,48 +1,75 @@
 package gui;
+import datos.DatosEstudiante;
+import dominio.Curso;
+import dominio.Estudiante;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class Ventana_AgregarEstudianteICC264 extends Ventana implements ActionListener {
-    JLabel rut;
-    JLabel Nombre;
-    JLabel Email;
-    JTextField DatoRut;
-    JTextField DatoNombre;
-    JTextField DatoEmail;
-    JButton Agregar;
-    JButton Cancelar;
-    protected final String fuente = "Sabon Next LT";
-    protected final int tamañoFuente = 10;
+    Curso curso;
 
-    public Ventana_AgregarEstudianteICC264(){
-        rut = this.generarEtiqueta("Rut: ", 20, 100, 70, 20,
-                this.fuente, this.tamañoFuente);
-        DatoRut = this.generarCampoDeTexto(100,100,70,20);
-        Nombre = this.generarEtiqueta("Nombre: ", 20, 150, 70, 20,
-                this.fuente, this.tamañoFuente);
-        DatoNombre = this.generarCampoDeTexto(100,150,70,20);
-        Email = this.generarEtiqueta("Email: ", 20, 200, 70, 20,
-                this.fuente, this.tamañoFuente);
-        DatoEmail = this.generarCampoDeTexto(100,200,70,20);
+    private JButton agregar;
+    private JButton cancelar;
 
-        Agregar = this.generarBoton("Agregar",20,300,90,20);
-        Agregar.addActionListener(this);
+    private JTextField nombretxt;
+    private JTextField emailtxt;
+    private JTextField ruttxt;
 
-        Cancelar = this.generarBoton("Cancelar",100,300,90,20);
-        Agregar.addActionListener(this);
+    public Ventana_AgregarEstudianteICC264(Curso curso) {
+        this.curso = curso;
 
+        this.setTitle("Agregar Estudiante ICC264");
+
+        JLabel rutLabel = this.generarEtiqueta("Rut: ", 50, 50, 100, 20);
+        JLabel nombreLabel = this.generarEtiqueta("Nombre: ", 50, 100, 100, 20);
+        JLabel emailLabel = this.generarEtiqueta("Email: ", 50, 150, 100, 20);
+
+        agregar = this.generarBoton("Agregar", 50, 200, 125, 30);
+        cancelar = this.generarBoton("Cancelar", 225, 200, 125, 30);
+
+        agregar.addActionListener(this);
+        cancelar.addActionListener(this);
+
+        ruttxt = this.generarCampoDeTexto(150, 50, 200, 20);
+        nombretxt = this.generarCampoDeTexto(150, 100, 200, 20);
+        emailtxt = this.generarCampoDeTexto(150, 150, 200, 20);
     }
 
+    public void agregarEstudiante() {
+        if(!camposVacios()) {
+            Estudiante estudiante = new Estudiante(ruttxt.getText(), nombretxt.getText(), emailtxt.getText());
+            curso.añadirEstudiante(estudiante);
+            DatosEstudiante.registrarDatos(estudiante, "ICC264.txt");
+
+            JOptionPane.showMessageDialog(this, "¡El ha sido registrado exitósamente!",
+                    "Vehiculos", JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(this, "El estudiante no se ha podido registrar",
+                    "Vehiculos", JOptionPane.INFORMATION_MESSAGE);
+        }
+    }
+
+    public boolean camposVacios() {
+        return ruttxt.getText().equals("") || nombretxt.getText().equals("") ||
+                emailtxt.getText().equals("");
+    }
+
+    public void limpiarTextField() {
+        nombretxt.setText("");
+        ruttxt.setText("");
+        emailtxt.setText("");
+    }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if(e.getSource()==Cancelar){
+        if(e.getSource() == cancelar) {
+            new Ventana_CursoICC264(this.curso);
             this.dispose();
-
-
+        } else if(e.getSource() == agregar) {
+            agregarEstudiante();
+            limpiarTextField();
         }
-
     }
 }

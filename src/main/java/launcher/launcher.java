@@ -1,11 +1,12 @@
 package launcher;
 
-import gui.Ventana_AgregarEstudianteICC264;
+import dominio.Curso;
+import gui.Ventana_CursoICC264;
 
 public class launcher {
 
     public static void main(String[] args){
-        Ventana_AgregarEstudianteICC264 vtn= new Ventana_AgregarEstudianteICC264();
+        Ventana_CursoICC264 ventana = new Ventana_CursoICC264(new Curso());
 
     }
 
